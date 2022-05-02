@@ -1,3 +1,10 @@
+## How to use
+1. Install package from npm
+```npm install libgovno```
+
+2. Include lib
+```const { requests } = require('libgovno');```
+
 ## Quick example
 ```js
 // Callbacks
