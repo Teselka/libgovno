@@ -149,20 +149,15 @@ export async function request(url: string, options?: RequestOptions | ResponseCa
     }
 }
 
-// Common requests
-[
-    'GET',
-    'POST',
-    'HEAD',
-    'PUT',
-    'DELETE',
-    'CONNECT',
-    'OPTIONS',
-    'TRACE',
-    'PATCH'
-].forEach((v, i) => {
-    module.exports[v.toLowerCase()] = async function(url: string, options?: RequestOptions | ResponseCallback, callback?: ResponseCallback) {
-        if (typeof(options) == 'object') options.method = v.toUpperCase();
-        return await request(url, options, callback);
-    }
-});
+// Declaring functions 
+// TODO: Export all of these functions by module.exports and fix typings
+export async function get(url: string, options?: RequestOptions | ResponseCallback, callback?: ResponseCallback) { if (typeof(options) == 'object') options.method = 'GET'; return await request(url, options, callback);}
+export async function post(url: string, options?: RequestOptions | ResponseCallback, callback?: ResponseCallback) { if (typeof(options) == 'object') options.method = 'POST'; return await request(url, options, callback);}
+export async function head(url: string, options?: RequestOptions | ResponseCallback, callback?: ResponseCallback) { if (typeof(options) == 'object') options.method = 'HEAD'; return await request(url, options, callback);}
+export async function put(url: string, options?: RequestOptions | ResponseCallback, callback?: ResponseCallback) { if (typeof(options) == 'object') options.method = 'PUT'; return await request(url, options, callback);}
+// TODO: Fix this somehow
+//export async function delete(url: string, options?: RequestOptions | ResponseCallback, callback?: ResponseCallback) { if (typeof(options) == 'object') options.method = 'DELETE'; return await request(url, options, callback);} 
+export async function connect(url: string, options?: RequestOptions | ResponseCallback, callback?: ResponseCallback) { if (typeof(options) == 'object') options.method = 'CONNECT'; return await request(url, options, callback);}
+export async function options(url: string, options?: RequestOptions | ResponseCallback, callback?: ResponseCallback) { if (typeof(options) == 'object') options.method = 'OPTIONS'; return await request(url, options, callback);}
+export async function trace(url: string, options?: RequestOptions | ResponseCallback, callback?: ResponseCallback) { if (typeof(options) == 'object') options.method = 'TRACE'; return await request(url, options, callback);}
+export async function patch(url: string, options?: RequestOptions | ResponseCallback, callback?: ResponseCallback) { if (typeof(options) == 'object') options.method = 'PATCH'; return await request(url, options, callback);}

@@ -1,8 +1,8 @@
 {
   "name": "libgovno",
-  "version": "1.0.2",
+  "version": "1.0.6",
   "description": "Lightweight node.js http requests",
-  "main": "src/index.ts",
+  "main": "src/index.js",
   "exports": {
     ".": "./lib/index.js"
   },
