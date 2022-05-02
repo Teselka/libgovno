@@ -31,7 +31,7 @@ async function proxy_callback(err: Error, data: Response, opts: ProxyCallbackOpt
     // epic
     if (!err 
         && (opts.options !== undefined && typeof(opts.options) == 'object' && opts.options.follow_redirects == true) 
-        && data.status == 301 && data.headers.location !== undefined) {
+        && data.headers.location !== undefined) {
             return await request(data.headers.location, opts.options, opts.callback);
         }
     else if (opts.real_callback !== undefined)
