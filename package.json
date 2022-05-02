@@ -1,6 +1,6 @@
 {
   "name": "libgovno",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "description": "Lightweight node.js http requests",
   "main": "src/index.js",
   "exports": {
@@ -9,7 +9,9 @@
   "types": "./typings/index.d.ts",
   "scripts": {
     "build": "tsc --build",
-    "test": "node tests/index.js"
+    "test": "node tests/index.js",
+    "prepublish": "npm run build",
+    "publish": "npm publish"
   },
   "keywords": [
     "http",
