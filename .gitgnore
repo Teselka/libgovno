@@ -1,4 +1,4 @@
-node_modules/*
-lib/*
-typings/*
-.vscode/*
+/node_modules/*
+/lib/*
+/typings/*
+/.vscode/*
