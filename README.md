@@ -16,10 +16,16 @@ requests.get('https://example.com/')
         console.log(data.status);
     });
     
+// Async await
+const data = await requests.get('https://example.com/');
+    
 // Passing some data
 requests.get('https://example.com/', { json: {'key':'value'} });
 
 // Link params
 requests.get('https://example.com/', { params: {'key':'value'} });
+
+// Cookies
+requests.get('https://httpbin.org/cookies', { cookies:[ { name:'aboba',value:'yes' } ] });  
 ```
  
