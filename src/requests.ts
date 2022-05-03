@@ -11,6 +11,7 @@ type RequestOptions = {
     json?: object | undefined,
     raw_data?: string | Buffer | undefined,
     headers?: OutgoingHttpHeaders | undefined,
+    cookies?: Array<object> | undefined,
     useragent?: string | undefined,
     timeout?: number | undefined,
     follow_redirects?: boolean | undefined,
@@ -80,6 +81,21 @@ export async function request(url: string, options?: RequestOptions | ResponseCa
             params += await (encodeURIComponent(i)+"="+encodeURIComponent(opts.params[i]));
         }
         url += params;
+    }
+
+    if (opts.cookies !== undefined) {
+        let str = '';
+        for (let i in opts.cookies) {
+            if (typeof(opts.cookies[i]['name']) === 'string' 
+                && typeof(opts.cookies[i]['value']) === 'string') {
+                str += `${opts.cookies[i]['name']}=${opts.cookies[i]['value']}; `;
+            }
+        }
+
+        if (str[str.length-2] === ';' && str[str.length-1] === ' ')
+            str = str.substring(0, str.length-2);
+
+        headers['cookie'] = str;
     }
 
     if (opts.headers !== undefined) {
