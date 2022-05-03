@@ -26,6 +26,6 @@ requests.get('https://example.com/', { json: {'key':'value'} });
 requests.get('https://example.com/', { params: {'key':'value'} });
 
 // Cookies
-requests.get('https://httpbin.org/cookies', { cookies:[ { name:'aboba',value:'yes' } ] });  
+requests.get('https://example.com/', { cookies:[ { name:'aboba',value:'yes' } ] });  
 ```
  
