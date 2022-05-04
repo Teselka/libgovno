@@ -108,7 +108,7 @@ export async function request(url: string, options?: RequestOptions | ResponseCa
         headers['Accept'] = '*/*';
 
     if (headers['Accept-Encoding'] === undefined)
-        headers['Accept'] = 'gzip, deflate';
+        headers['Accept-Encoding'] = '*';
     
     const myurl = new URL(url);
     if ((opts.worldwide === undefined || opts.worldwide === true)
