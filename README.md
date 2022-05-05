@@ -1,4 +1,11 @@
-## How to use
+<header>
+<h1 style="display: inline">libgovno</h1>
+Requests library for humans
+
+[![install size](https://packagephobia.com/badge?p=libgovno)](https://packagephobia.com/result?p=libgovno)
+</header>
+    
+## How to install
 1. Install package from npm
 ```npm install libgovno```
 
