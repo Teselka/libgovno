@@ -1,6 +1,6 @@
 {
   "name": "libgovno",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Lightweight node.js http requests",
   "main": "src/index.js",
   "exports": {
@@ -14,7 +14,7 @@
     "publish": "npm publish"
   },
   "keywords": [
-    " ",
+    "http",
     "https",
     "requests",
     "lightweight",
@@ -24,6 +24,10 @@
   ],
   "author": "Teselka",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Teselka/libgovno.git"
+  },
   "devDependencies": {
     "@types/node": "^17.0.23"
   }
