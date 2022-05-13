@@ -17,7 +17,14 @@ type RequestOptions = {
     follow_redirects?: boolean | undefined,
     max_redirects?: number | undefined,
     worldwide?: boolean | undefined,
-    callback?: ResponseCallback | undefined
+    callback?: ResponseCallback | undefined,
+
+    /**
+     * @deprecated
+     * @description DO NOT USE!!! It's used internally
+     * TODO: Do not expose it here
+     */
+    redirects?: number | undefined
 };
 type ProxyCallbackOptions =  {
     url: string, 
@@ -36,6 +43,7 @@ async function proxy_callback(err: Error, data: Response, opts: ProxyCallbackOpt
     if (!err 
         && (opts.options !== undefined && typeof(opts.options) == 'object' && opts.options.follow_redirects == true) 
         && data.headers.location !== undefined) {
+            opts.options.redirects = opts.redirects === undefined && 1 || opts.redirects+1;
             return await request(data.headers.location, opts.options, opts.callback);
         }
     else if (opts.real_callback !== undefined)
@@ -123,7 +131,7 @@ export async function request(url: string, options?: RequestOptions | ResponseCa
     }
     
     const port = opts.port ?? (myurl.port.length > 0 ? myurl.port : "443")
-    const lib = myurl.protocol == 'http:' ? http : https;   
+    const lib = https;   
 
     let success = false;
     let chunks = '';
@@ -144,7 +152,7 @@ export async function request(url: string, options?: RequestOptions | ResponseCa
         res.on('data', (chunk) => {chunks += chunk;});
         res.on('end', () => {
             if (opts !== undefined && opts.callback) {
-                proxy_callback(err, new Response(res, chunks), {url, options, callback, real_callback: opts.callback, redirects: 0 });
+                proxy_callback(err, new Response(res, chunks), {url, options, callback, real_callback: opts.callback, redirects: opts.redirects });
             }
 
             success = true;
@@ -167,7 +175,7 @@ export async function request(url: string, options?: RequestOptions | ResponseCa
         if (err)
             throw err;
         
-        return await proxy_callback(err, new Response(response, chunks), {url, options, callback, real_callback: undefined, redirects: 0 });
+        return await proxy_callback(err, new Response(response, chunks), {url, options, callback, real_callback: undefined, redirects: opts.redirects });
     }
 }
 
