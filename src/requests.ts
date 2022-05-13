@@ -27,6 +27,9 @@ type ProxyCallbackOptions =  {
     redirects?: number | undefined
 }
 
+// Prebuild regular expressions
+const wwwexpr = new RegExp("\\.", 'g');
+
 // proxy callback
 async function proxy_callback(err: Error, data: Response, opts: ProxyCallbackOptions): Promise<void | Response> {
     // epic
@@ -111,11 +114,14 @@ export async function request(url: string, options?: RequestOptions | ResponseCa
         headers['Accept-Encoding'] = '*';
     
     const myurl = new URL(url);
-    if ((opts.worldwide === undefined || opts.worldwide === true)
-        && !myurl.hostname.startsWith('www.')) {
-            myurl.hostname = 'www.'.concat(myurl.hostname);
+    if ((opts.worldwide === undefined   
+            && !myurl.hostname.startsWith('www.') 
+            && Array.from(myurl.hostname.matchAll(wwwexpr), m => m[0]).length == 1)
+        || (opts.worldwide === true && !myurl.hostname.startsWith('www.'))) 
+    {
+        myurl.hostname = 'www.'.concat(myurl.hostname);
     }
-
+    
     const port = opts.port ?? (myurl.port.length > 0 ? myurl.port : "443")
     const lib = myurl.protocol == 'http:' ? http : https;   
 
