@@ -22,5 +22,4 @@ const methodtest = (async (method) => {
 
     const x1 = await requests.get('https://httpbin.org/absolute-redirect/6', {follow_redirects: true});
     myassert(x1.redirects == 6, 'Redirects');
-
 })();
