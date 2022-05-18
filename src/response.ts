@@ -1,4 +1,3 @@
-import { stat } from "fs";
 import { IncomingMessage } from "http";
 
 export class Response

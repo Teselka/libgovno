@@ -190,6 +190,7 @@ function __wrapperfn(name) {
 }
 
 module.exports = {
+    request: request,
     get: __wrapperfn('GET'),
     post: __wrapperfn('POST'),
     head: __wrapperfn('HEAD'),
