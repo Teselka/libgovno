@@ -10,6 +10,12 @@ const methodtest = (async (method) => {
 });
 
 (async () => {
+    methodtest('get');
+    methodtest('post');
+    methodtest('put');
+    methodtest('connect');
+    methodtest('patch');
+
     const x = await requests.get('https://httpbin.org/cookies', {
         cookies:[
             {

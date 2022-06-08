@@ -37,11 +37,10 @@ type ProxyCallbackOptions =  {
 // Prebuild regular expressions
 const wwwexpr = new RegExp("\\.", 'g');
 
-// proxy callback
 async function proxy_callback(err: Error, data: Response, opts: ProxyCallbackOptions): Promise<void | Response> {
     // epic
     if (!err 
-        && (opts.options !== undefined && typeof(opts.options) == 'object' && opts.options.follow_redirects == true) 
+        && (opts.options !== undefined && typeof(opts.options) == 'object' && (opts.options.follow_redirects === undefined || opts.options.follow_redirects == true)) 
         && data.headers.location !== undefined) {
             opts.options.redirects = opts.redirects === undefined && 1 || opts.redirects+1;
             return await request(data.headers.location, opts.options, opts.callback);
@@ -59,10 +58,16 @@ async function proxy_callback(err: Error, data: Response, opts: ProxyCallbackOpt
     }
 }
 
-/*
-    base request function
-*/
-export async function request(url: string, options?: RequestOptions | ResponseCallback, callback?: ResponseCallback): Promise<void | Response> {
+/**
+ * Base requests function
+ * 
+ * @function
+ * @param {RequestOptions | ResponseCallback} err 
+ * @param {ResponseCallback} data 
+ * @returns {Promise<void | Response>}
+ * @returns 
+ */
+async function request(url: string, options?: RequestOptions | ResponseCallback, callback?: ResponseCallback): Promise<void | Response> {
     let opts: RequestOptions = {};
     if (options && typeof(options) == 'object')
         opts = options;
@@ -70,7 +75,7 @@ export async function request(url: string, options?: RequestOptions | ResponseCa
     if (callback && typeof(callback) == 'function')
         opts.callback = callback;
 
-    const headers: OutgoingHttpHeaders = {};
+    let headers: OutgoingHttpHeaders = {};
     let send_data = null;
 
     headers['User-Agent'] = opts.useragent ?? 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/99.0';
@@ -122,10 +127,7 @@ export async function request(url: string, options?: RequestOptions | ResponseCa
         headers['Accept-Encoding'] = '*';
     
     const myurl = new URL(url);
-    if ((opts.worldwide === undefined   
-            && !myurl.hostname.startsWith('www.') 
-            && Array.from(myurl.hostname.matchAll(wwwexpr), m => m[0]).length == 1)
-        || (opts.worldwide === true && !myurl.hostname.startsWith('www.'))) 
+    if (opts.worldwide === true && !myurl.hostname.startsWith('www.'))
     {
         myurl.hostname = 'www.'.concat(myurl.hostname);
     }
@@ -180,7 +182,7 @@ export async function request(url: string, options?: RequestOptions | ResponseCa
 }
 
 // Declaring functions 
-function __wrapperfn(name) {
+function __wrapperfn(name: string) : (url: string, options?: RequestOptions | ResponseCallback, callback?: ResponseCallback) => Promise<void | Response> {
     return async (url: string, options?: RequestOptions | ResponseCallback, callback?: ResponseCallback) => {
         if (typeof(options) == 'object') 
             options.method = name; 
@@ -189,15 +191,23 @@ function __wrapperfn(name) {
     }
 }
 
-module.exports = {
-    request: request,
-    get: __wrapperfn('GET'),
-    post: __wrapperfn('POST'),
-    head: __wrapperfn('HEAD'),
-    put: __wrapperfn('PUT'),
-    delete: __wrapperfn('DELETE'),
-    connect: __wrapperfn('CONNECT'),
-    options: __wrapperfn('OPTIONS'),
-    trace: __wrapperfn('TRACE'),
-    patch: __wrapperfn('PATCH')
+const get = __wrapperfn('GET');
+const post = __wrapperfn('POST');
+const head = __wrapperfn('HEAD');
+const put = __wrapperfn('PUT');
+const connect = __wrapperfn('CONNECT');
+const options = __wrapperfn('OPTIONS');
+const trace = __wrapperfn('TRACE');
+const patch = __wrapperfn('PATCH');
+
+export {
+    request,
+    get,
+    post,
+    head,
+    put,
+    connect,
+    options,
+    trace,
+    patch
 }
